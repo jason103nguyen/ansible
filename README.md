@@ -133,6 +133,7 @@ ansible-playbook test-playbook.yml --check
 
 ```bash
 # Run site playbook (using roles)
+ansible-playbook bootstrap.yml
 ansible-playbook site.yml
 
 # Run only web servers

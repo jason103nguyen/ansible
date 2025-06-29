@@ -1,0 +1,48 @@
+---
+- name: Test playbook for practicing Ansible concepts
+  hosts: all
+  become: true
+  gather_facts: true
+  
+  tasks:
+    - name: Test ping connectivity
+      ping:
+      tags: connectivity
+      
+    - name: Display gathered facts
+      debug:
+        msg: |
+          Hostname: {{ ansible_hostname }}
+          OS: {{ ansible_distribution }} {{ ansible_distribution_version }}
+          IP: {{ ansible_default_ipv4.address }}
+          Architecture: {{ ansible_architecture }}
+      tags: facts
+      
+    - name: Install packages based on OS
+      apt:
+        name: "{{ item }}"
+        state: latest
+        update_cache: true
+      loop:
+        - neofetch
+        - figlet
+      when: ansible_os_family == "Debian"
+      tags: packages
+      
+    - name: Create test file with template
+      template:
+        src: test-file.j2
+        dest: /tmp/ansible-test.txt
+        mode: '0644'
+      tags: files
+      
+    - name: Show system information
+      command: neofetch --stdout
+      register: system_info
+      changed_when: false
+      tags: info
+      
+    - name: Display system information
+      debug:
+        var: system_info.stdout_lines
+      tags: info 

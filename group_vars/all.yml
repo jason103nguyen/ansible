@@ -1,0 +1,26 @@
+---
+# Các biến chung cho tất cả máy chủ
+timezone: Asia/Ho_Chi_Minh
+ntp_servers:
+  - pool.ntp.org
+  - time.google.com
+
+# Người dùng SSH được phép truy cập
+ssh_users:
+  - ansible
+  - vagrant
+
+# Cấu hình SSH
+ssh_port: 22
+allow_password_auth: false
+
+# Packages cơ bản cần cài đặt
+base_packages:
+  - vim
+  - curl
+  - wget
+  - git
+  - htop
+  - tree
+  - unzip
+  - software-properties-common 

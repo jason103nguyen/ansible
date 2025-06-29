@@ -1,0 +1,36 @@
+---
+- name: Apply base configuration to all servers
+  hosts: all
+  become: true
+  roles:
+    - base
+  tags:
+    - base
+    - always
+
+- name: Configure web servers
+  hosts: web_servers
+  become: true
+  roles:
+    - webserver
+  tags:
+    - web
+    - apache
+
+- name: Configure database servers
+  hosts: db_servers
+  become: true
+  roles:
+    - database
+  tags:
+    - db
+    - mysql
+
+- name: Configure file servers
+  hosts: file_servers
+  become: true
+  roles:
+    - fileserver
+  tags:
+    - files
+    - samba 

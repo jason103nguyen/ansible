@@ -1,0 +1,38 @@
+========================================
+    ANSIBLE TEST FILE
+========================================
+
+Server: {{ ansible_hostname }}
+IP Address: {{ ansible_default_ipv4.address }}
+Operating System: {{ ansible_distribution }} {{ ansible_distribution_version }}
+Kernel: {{ ansible_kernel }}
+Architecture: {{ ansible_architecture }}
+Processor: {{ ansible_processor[2] if ansible_processor|length > 2 else 'Unknown' }}
+Memory: {{ (ansible_memtotal_mb/1024)|round(1) }} GB
+Role: {{ server_role | default('general') }}
+
+Generated: {{ ansible_date_time.iso8601 }}
+Timezone: {{ timezone }}
+
+{{ custom_message | default('Đây là file test được tạo bởi Ansible!') }}
+
+SSH Users: {{ ssh_users | join(', ') }}
+Base Packages: {{ base_packages | join(', ') }}
+
+{% if ansible_hostname in groups['web_servers'] %}
+Web Server Configuration:
+- Package: {{ apache_package }}
+- Service: {{ apache_service }}
+- Document Root: {{ document_root }}
+- Port: {{ web_server_port }}
+{% endif %}
+
+{% if ansible_hostname in groups['db_servers'] %}
+Database Configuration:
+- Package: {{ mysql_package }}
+- Service: {{ mysql_service }}
+- Port: {{ mysql_port }}
+- Bind Address: {{ mysql_bind_address }}
+{% endif %}
+
+======================================== 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ansible_hostname }} - Web Server</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: rgba(255,255,255,0.1); 
+            padding: 30px; 
+            border-radius: 10px; 
+            backdrop-filter: blur(10px);
+        }
+        .info { background: rgba(255,255,255,0.2); padding: 15px; margin: 10px 0; border-radius: 5px; }
+        h1 { color: #fff; text-align: center; }
+        .highlight { color: #ffd700; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Ansible Web Server</h1>
+        
+        <div class="info">
+            <h2>{{ custom_message | default('Chào mừng đến với Web Server') }}</h2>
+        </div>
+        
+        <div class="info">
+            <h3>📊 Thông tin Server:</h3>
+            <p><span class="highlight">Hostname:</span> {{ ansible_hostname }}</p>
+            <p><span class="highlight">IP Address:</span> {{ ansible_default_ipv4.address }}</p>
+            <p><span class="highlight">OS:</span> {{ ansible_distribution }} {{ ansible_distribution_version }}</p>
+            <p><span class="highlight">Role:</span> {{ server_role | default('web-server') }}</p>
+            <p><span class="highlight">Kernel:</span> {{ ansible_kernel }}</p>
+            <p><span class="highlight">Architecture:</span> {{ ansible_architecture }}</p>
+        </div>
+        
+        <div class="info">
+            <h3>🌐 Web Server Info:</h3>
+            <p><span class="highlight">Web Server:</span> Apache {{ apache_package }}</p>
+            <p><span class="highlight">Document Root:</span> {{ document_root }}</p>
+            <p><span class="highlight">Server Admin:</span> {{ apache_server_admin | default('admin@localhost') }}</p>
+        </div>
+        
+        <div class="info">
+            <h3>⏰ System Time:</h3>
+            <p><span class="highlight">Current Time:</span> {{ ansible_date_time.iso8601 }}</p>
+            <p><span class="highlight">Timezone:</span> {{ timezone }}</p>
+        </div>
+        
+        <div class="info">
+            <p style="text-align: center; margin-top: 30px;">
+                <em>🔧 Được triển khai tự động bằng Ansible</em>
+            </p>
+        </div>
+    </div>
+</body>
+</html> 

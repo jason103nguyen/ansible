@@ -1,0 +1,57 @@
+---
+- name: Install Apache web server
+  package:
+    name: "{{ apache_package }}"
+    state: latest
+  tags: apache
+
+- name: Install PHP packages (for node1)
+  package:
+    name: "{{ custom_packages }}"
+    state: latest
+  when: inventory_hostname == "node1" and custom_packages is defined
+  tags: php
+
+- name: Start and enable Apache service
+  service:
+    name: "{{ apache_service }}"
+    state: started
+    enabled: true
+  tags: apache
+
+- name: Enable Apache modules
+  apache2_module:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ apache_modules }}"
+  notify: restart apache
+  tags: apache
+
+- name: Create custom index page
+  template:
+    src: index.html.j2
+    dest: "{{ document_root }}/index.html"
+    mode: '0644'
+  tags: apache
+
+- name: Configure Apache virtual host
+  template:
+    src: vhost.conf.j2
+    dest: /etc/apache2/sites-available/000-default.conf
+    backup: true
+  notify: restart apache
+  tags: apache
+
+- name: Allow HTTP traffic through firewall
+  ufw:
+    rule: allow
+    port: "{{ web_server_port }}"
+    proto: tcp
+  tags: firewall
+
+- name: Allow HTTPS traffic through firewall
+  ufw:
+    rule: allow
+    port: "{{ ssl_port }}"
+    proto: tcp
+  tags: firewall 

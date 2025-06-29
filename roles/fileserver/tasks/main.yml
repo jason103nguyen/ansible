@@ -1,0 +1,55 @@
+---
+- name: Install Samba
+  package:
+    name:
+      - samba
+      - samba-common-bin
+    state: latest
+  tags: samba
+
+- name: Create shared directory
+  file:
+    path: /srv/shared
+    state: directory
+    mode: '0755'
+    owner: nobody
+    group: nogroup
+  tags: samba
+
+- name: Configure Samba
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+    backup: true
+  notify: restart samba
+  tags: samba
+
+- name: Start and enable Samba services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - smbd
+    - nmbd
+  tags: samba
+
+- name: Allow Samba traffic through firewall
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - 139
+    - 445
+  tags: firewall
+
+- name: Create sample file in shared directory
+  copy:
+    content: |
+      Đây là file chia sẻ từ {{ ansible_hostname }}
+      Thời gian tạo: {{ ansible_date_time.iso8601 }}
+      IP: {{ ansible_default_ipv4.address }}
+    dest: /srv/shared/readme.txt
+    mode: '0644'
+  tags: samba 

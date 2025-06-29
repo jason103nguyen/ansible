@@ -1,0 +1,64 @@
+---
+- name: Install MySQL server
+  package:
+    name: "{{ mysql_package }}"
+    state: latest
+  tags: mysql
+
+- name: Install Python MySQL client
+  package:
+    name: python3-pymysql
+    state: latest
+  tags: mysql
+
+- name: Start and enable MySQL service
+  service:
+    name: "{{ mysql_service }}"
+    state: started
+    enabled: true
+  tags: mysql
+
+- name: Configure MySQL
+  template:
+    src: mysql.cnf.j2
+    dest: "{{ mysql_config_file }}"
+    backup: true
+  notify: restart mysql
+  tags: mysql
+
+- name: Set MySQL root password
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    state: present
+  tags: mysql
+
+- name: Create MySQL databases
+  mysql_db:
+    name: "{{ item.name }}"
+    encoding: "{{ item.encoding | default('utf8mb4') }}"
+    collation: "{{ item.collation | default('utf8mb4_unicode_ci') }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: present
+  loop: "{{ mysql_databases }}"
+  tags: mysql
+
+- name: Create MySQL users
+  mysql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    priv: "{{ item.privileges }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: present
+  loop: "{{ mysql_users }}"
+  tags: mysql
+
+- name: Allow MySQL traffic through firewall
+  ufw:
+    rule: allow
+    port: "{{ mysql_port }}"
+    proto: tcp
+  tags: firewall 

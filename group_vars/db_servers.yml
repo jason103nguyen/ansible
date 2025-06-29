@@ -1,0 +1,22 @@
+---
+# Cấu hình cho Database Servers
+mysql_package: mysql-server
+mysql_service: mysql
+mysql_config_file: /etc/mysql/mysql.conf.d/mysqld.cnf
+
+# MySQL configuration
+mysql_root_password: "{{ vault_mysql_root_password | default('changeme123') }}"
+mysql_bind_address: 0.0.0.0
+mysql_port: 3306
+
+# Database users
+mysql_users:
+  - name: webapp
+    password: "{{ vault_webapp_password | default('webapp123') }}"
+    privileges: "webapp.*:ALL"
+
+# Databases
+mysql_databases:
+  - name: webapp
+    encoding: utf8mb4
+    collation: utf8mb4_unicode_ci 

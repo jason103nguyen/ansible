@@ -1,0 +1,63 @@
+---
+- name: Bootstrap servers for Ansible management
+  hosts: all
+  become: true
+  gather_facts: true
+  
+  tasks:
+    - name: Update package cache (Ubuntu/Debian)
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+      
+    - name: Install essential packages
+      package:
+        name:
+          - vim
+          - curl
+          - wget
+          - git
+          - htop
+          - tree
+        state: latest
+        
+    - name: Create ansible user
+      user:
+        name: ansible
+        groups: sudo
+        shell: /bin/bash
+        create_home: true
+        
+    - name: Set up sudo access for ansible user
+      copy:
+        content: 'ansible ALL=(ALL) NOPASSWD:ALL'
+        dest: /etc/sudoers.d/ansible
+        mode: '0440'
+        
+    - name: Create .ssh directory for ansible user
+      file:
+        path: /home/ansible/.ssh
+        state: directory
+        owner: ansible
+        group: ansible
+        mode: '0700'
+        
+    - name: Add SSH public key for ansible user
+      authorized_key:
+        user: ansible
+        key: "{{ lookup('file', '~/.ssh/ansible_key.pub') }}"
+      ignore_errors: true
+      
+    - name: Disable password authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+      notify: restart ssh
+      
+  handlers:
+    - name: restart ssh
+      service:
+        name: ssh
+        state: restarted 

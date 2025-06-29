@@ -1,0 +1,19 @@
+<VirtualHost *:{{ web_server_port }}>
+    ServerAdmin {{ apache_server_admin | default('admin@localhost') }}
+    ServerName {{ apache_server_name | default(ansible_hostname) }}
+    DocumentRoot {{ document_root }}
+    
+    <Directory {{ document_root }}>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    
+    # PHP configuration (if PHP is installed)
+    {% if inventory_hostname == "node1" %}
+    DirectoryIndex index.php index.html
+    {% endif %}
+</VirtualHost> 

@@ -1,0 +1,58 @@
+---
+- name: Update package cache
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+  tags: packages
+
+- name: Install base packages
+  package:
+    name: "{{ base_packages }}"
+    state: latest
+  tags: packages
+
+- name: Set timezone
+  timezone:
+    name: "{{ timezone }}"
+  notify: restart cron
+  tags: timezone
+
+- name: Configure SSH
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    backup: true
+    mode: '0644'
+  notify: restart ssh
+  tags: ssh
+
+- name: Create SSH users authorized_keys
+  authorized_key:
+    user: "{{ item }}"
+    key: "{{ lookup('file', '~/.ssh/ansible_key.pub') }}"
+    state: present
+  loop: "{{ ssh_users }}"
+  ignore_errors: true
+  tags: ssh
+
+- name: Install security updates
+  apt:
+    upgrade: safe
+    update_cache: true
+  when: ansible_os_family == "Debian"
+  tags: security
+
+- name: Configure firewall (UFW)
+  ufw:
+    rule: allow
+    port: "{{ ssh_port }}"
+    proto: tcp
+  tags: firewall
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+    policy: deny
+    direction: incoming
+  tags: firewall 

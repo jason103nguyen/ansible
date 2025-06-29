@@ -1,0 +1,11 @@
+---
+# Cấu hình riêng cho node2
+server_role: "secondary-web"
+custom_message: "Chào mừng đến với Node2 - Secondary Web Server"
+
+# Apache specific config for node2
+apache_server_admin: admin@node2.local
+apache_server_name: node2.local
+
+# Load balancer member
+load_balancer_weight: 1 

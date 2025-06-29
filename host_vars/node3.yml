@@ -1,7 +1,7 @@
 ---
-# Cấu hình riêng cho node3
+# Specific configuration for node3
 server_role: "database"
-custom_message: "Chào mừng đến với Node3 - Database Server"
+custom_message: "Welcome to Node3 - Database Server"
 
 # MySQL specific config for node3
 mysql_server_id: 1

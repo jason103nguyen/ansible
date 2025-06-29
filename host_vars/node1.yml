@@ -1,7 +1,7 @@
 ---
-# Cấu hình riêng cho node1
+# Specific configuration for node1
 server_role: "primary-web"
-custom_message: "Chào mừng đến với Node1 - Primary Web Server"
+custom_message: "Welcome to Node1 - Primary Web Server"
 
 # Apache specific config for node1
 apache_server_admin: admin@node1.local

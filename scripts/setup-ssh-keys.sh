@@ -1,31 +1,31 @@
 #!/bin/bash
 
-# Script để setup SSH keys cho Ansible
-echo "🔑 Thiết lập SSH Keys cho Ansible..."
+# Script to setup SSH keys for Ansible
+echo "🔑 Setting up SSH Keys for Ansible..."
 
-# Tạo thư mục .ssh nếu chưa có
+# Create .ssh directory if it doesn't exist
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
-# Tạo SSH key pair cho Ansible (không có passphrase để tự động hóa)
+# Create SSH key pair for Ansible (no passphrase for automation)
 if [ ! -f ~/.ssh/ansible_key ]; then
-    echo "Tạo SSH key pair mới..."
+    echo "Creating new SSH key pair..."
     ssh-keygen -t ed25519 -f ~/.ssh/ansible_key -N "" -C "ansible-automation-key"
-    echo "✅ SSH key đã được tạo tại ~/.ssh/ansible_key"
+    echo "✅ SSH key created at ~/.ssh/ansible_key"
 else
-    echo "SSH key đã tồn tại tại ~/.ssh/ansible_key"
+    echo "SSH key already exists at ~/.ssh/ansible_key"
 fi
 
-# Hiển thị public key
+# Display public key
 echo ""
-echo "📋 Public key của bạn:"
+echo "📋 Your public key:"
 cat ~/.ssh/ansible_key.pub
 
 echo ""
-echo "🚀 Để copy key lên các máy chủ, sử dụng:"
+echo "🚀 To copy key to servers, use:"
 echo "ssh-copy-id -i ~/.ssh/ansible_key.pub vagrant@192.168.56.101"
 echo "ssh-copy-id -i ~/.ssh/ansible_key.pub vagrant@192.168.56.102"
 echo "ssh-copy-id -i ~/.ssh/ansible_key.pub vagrant@192.168.56.103"
 
 echo ""
-echo "🔧 Hoặc chạy script copy-keys.sh sau khi các VM đã sẵn sàng" 
+echo "🔧 Or run copy-keys.sh script after VMs are ready" 

@@ -47,8 +47,8 @@
 - name: Create sample file in shared directory
   copy:
     content: |
-      Đây là file chia sẻ từ {{ ansible_hostname }}
-      Thời gian tạo: {{ ansible_date_time.iso8601 }}
+      This is a shared file from {{ ansible_hostname }}
+      Created at: {{ ansible_date_time.iso8601 }}
       IP: {{ ansible_default_ipv4.address }}
     dest: /srv/shared/readme.txt
     mode: '0644'

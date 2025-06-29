@@ -1,109 +1,116 @@
-# 🖥️ Hướng Dẫn Setup Trên Windows
+# 🖥️ Windows Setup Guide
 
-## 📋 Yêu Cầu Hệ Thống
+## 📋 System Requirements
 
-### 1. Cài Đặt Các Tool Cần Thiết
+### 1. Install Required Tools
 
 - **VirtualBox**: [Download](https://www.virtualbox.org/wiki/Downloads)
 - **Vagrant**: [Download](https://www.vagrantup.com/downloads)
-- **Git for Windows**: [Download](https://git-scm.com/download/win) (bao gồm Git Bash)
-- **Ansible**: Có thể cài qua WSL hoặc sử dụng Git Bash
+- **Git for Windows**: [Download](https://git-scm.com/download/win) (includes Git Bash)
+- **Ansible**: Can be installed via WSL or using Git Bash
 
-### 2. Cài Đặt Ansible
+### 2. Install Ansible
 
-#### Phương Án 1: Sử dụng WSL (Khuyến Nghị)
+#### Option 1: Using WSL (Recommended)
 
-1. Cài đặt WSL:
+1. Install WSL:
 ```powershell
 wsl --install
 ```
 
-2. Trong WSL Ubuntu, cài Ansible:
+2. In WSL Ubuntu, install Ansible:
 ```bash
 sudo apt update
 sudo apt install ansible
 ```
 
-#### Phương Án 2: Sử dụng Git Bash
+#### Option 2: Using Git Bash
 
-1. Mở Git Bash as Administrator
-2. Cài đặt Python và pip nếu chưa có
-3. Cài Ansible:
+1. Open Git Bash as Administrator
+2. Install Python and pip if not already installed
+3. Install Ansible:
 ```bash
 pip install ansible
 ```
 
-## 🚀 Chạy Scripts
+## 🚀 Running Scripts
 
-### Với Git Bash
+### With Git Bash
 
-Mở Git Bash trong thư mục dự án:
+Open Git Bash in the project directory:
 
 ```bash
-# Setup SSH keys
-bash scripts/setup-ssh-keys.sh
+# Navigate to project
+cd /path/to/ansible-practice
 
-# Các lệnh Vagrant
-bash scripts/vagrant-commands.sh start
+# Vagrant commands
+vagrant up
+vagrant status
+vagrant ssh node1
 
-# Các lệnh Ansible
-bash scripts/ansible-commands.sh ping
+# Ansible commands
+ansible all -m ping
+ansible-playbook site.yml
 ```
 
-### Với PowerShell
+### With PowerShell
 
 ```powershell
-# Sử dụng script PowerShell cho Vagrant
-.\scripts\vagrant-commands.ps1 start
-.\scripts\vagrant-commands.ps1 status
+# Use PowerShell script for Vagrant
+.\vagrant.ps1 up
+
+# For Ansible, use WSL
+wsl ansible all -m ping
 ```
 
-### Với WSL
+### With WSL
 
 ```bash
-cd /mnt/c/ansible_lab
-bash scripts/setup-ssh-keys.sh
+# All commands work normally in WSL
+vagrant up
+ansible all -m ping
+ansible-playbook site.yml
 ```
 
-## 🔧 Commands Thay Thế
+## 🔧 Alternative Commands
 
-### Vagrant Commands (PowerShell)
+If scripts don't work, use direct commands:
 
-```powershell
-vagrant up          # Khởi động VM
-vagrant halt        # Dừng VM
-vagrant status      # Xem trạng thái
-vagrant ssh node1   # SSH vào node1
-```
-
-### Ansible Commands (WSL/Git Bash)
-
+### Vagrant
 ```bash
-ansible all -m ping                    # Test ping
-ansible all -m gather_facts           # Thu thập facts
-ansible-playbook site.yml             # Chạy playbook
+vagrant up          # Start VMs
+vagrant halt        # Stop VMs
+vagrant status      # View status
+vagrant ssh node1   # SSH to node1
 ```
 
-## 💡 Lưu Ý Quan Trọng
-
-1. **Script Files**: Trên Windows cần dùng Git Bash hoặc WSL để chạy .sh files
-2. **SSH Keys**: Sẽ được tạo trong Git Bash environment
-3. **Ansible**: Chạy tốt nhất trên WSL hoặc Git Bash
-4. **PowerShell**: Có thể dùng cho Vagrant nhưng hạn chế cho Ansible
-
-## 🔍 Troubleshooting
-
-### Lỗi Permission
-- Chạy PowerShell/Git Bash as Administrator
-
-### Lỗi SSH
+### Ansible
 ```bash
-# Trong Git Bash
-ssh-keygen -t ed25519 -f ~/.ssh/ansible_key -N ""
+ansible all -m ping                     # Test connection
+ansible all -m gather_facts             # Gather facts
+ansible-playbook site.yml               # Run playbook
 ```
 
-### Lỗi Vagrant
-```powershell
-vagrant reload        # Restart
-vagrant destroy -f    # Xóa và tạo lại
+## 💡 Important Notes
+
+- Always run Git Bash **as Administrator** for Vagrant
+- If using WSL, all Linux commands work normally
+- VirtualBox may require enabling virtualization in BIOS
+- Windows Defender may block some operations
+
+### Permission Errors
+```bash
+# Run as Administrator
+```
+
+### SSH Errors
+```bash
+# In Git Bash or WSL
+bash scripts/copy-keys-vagrant.sh
+```
+
+### Vagrant Errors
+```bash
+vagrant destroy -f    # Delete and recreate
+vagrant up
 ``` 

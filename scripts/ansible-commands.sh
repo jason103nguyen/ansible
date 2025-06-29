@@ -1,134 +1,134 @@
 #!/bin/bash
 
-# Script chứa các lệnh Ansible để thực hành
+# Script containing Ansible commands for practice
 
 echo "🔧 Ansible Commands Helper"
 echo "========================="
 
 case "$1" in
     "ping")
-        echo "🏓 Test ping tất cả máy chủ..."
+        echo "🏓 Testing ping to all hosts..."
         ansible all -m ping
         ;;
     "facts")
-        echo "📊 Thu thập facts từ tất cả máy chủ..."
+        echo "📊 Gathering facts from all hosts..."
         ansible all -m gather_facts
         ;;
     "uptime")
-        echo "⏰ Kiểm tra uptime..."
+        echo "⏰ Checking uptime..."
         ansible all -a "uptime"
         ;;
     "disk")
-        echo "💿 Kiểm tra dung lượng disk..."
+        echo "💿 Checking disk usage..."
         ansible all -a "df -h"
         ;;
     "memory")
-        echo "🧠 Kiểm tra memory..."
+        echo "🧠 Checking memory..."
         ansible all -a "free -h"
         ;;
     "update")
-        echo "🔄 Update package cache..."
+        echo "🔄 Updating package cache..."
         ansible all -m apt -a "update_cache=true" --become
         ;;
     "install")
         if [ -z "$2" ]; then
-            echo "❌ Vui lòng cung cấp tên package"
-            echo "Ví dụ: $0 install htop"
+            echo "❌ Please provide package name"
+            echo "Example: $0 install htop"
             exit 1
         fi
-        echo "📦 Cài đặt package $2..."
+        echo "📦 Installing package $2..."
         ansible all -m apt -a "name=$2 state=latest" --become
         ;;
     "service")
         if [ -z "$2" ] || [ -z "$3" ]; then
-            echo "❌ Vui lòng cung cấp tên service và trạng thái"
-            echo "Ví dụ: $0 service apache2 started"
+            echo "❌ Please provide service name and state"
+            echo "Example: $0 service apache2 started"
             exit 1
         fi
-        echo "⚙️  Quản lý service $2..."
+        echo "⚙️  Managing service $2..."
         ansible all -m service -a "name=$2 state=$3" --become
         ;;
     "copy")
         if [ -z "$2" ] || [ -z "$3" ]; then
-            echo "❌ Vui lòng cung cấp file nguồn và đích"
-            echo "Ví dụ: $0 copy /local/file /remote/path"
+            echo "❌ Please provide source and destination files"
+            echo "Example: $0 copy /local/file /remote/path"
             exit 1
         fi
-        echo "📁 Copy file $2 -> $3..."
+        echo "📁 Copying file $2 -> $3..."
         ansible all -m copy -a "src=$2 dest=$3" --become
         ;;
     "bootstrap")
-        echo "🚀 Chạy bootstrap playbook..."
+        echo "🚀 Running bootstrap playbook..."
         ansible-playbook bootstrap.yml --ask-become-pass
         ;;
     "site")
-        echo "🌐 Chạy site playbook..."
+        echo "🌐 Running site playbook..."
         ansible-playbook site.yml
         ;;
     "test")
-        echo "🧪 Chạy test playbook..."
+        echo "🧪 Running test playbook..."
         ansible-playbook test-playbook.yml
         ;;
     "web")
-        echo "🌐 Chạy chỉ web servers..."
+        echo "🌐 Running web servers only..."
         ansible-playbook site.yml --tags web
         ;;
     "db")
-        echo "🗄️  Chạy chỉ database servers..."
+        echo "🗄️  Running database servers only..."
         ansible-playbook site.yml --tags db
         ;;
     "limit")
         if [ -z "$2" ]; then
-            echo "❌ Vui lòng cung cấp hostname"
-            echo "Ví dụ: $0 limit node1"
+            echo "❌ Please provide hostname"
+            echo "Example: $0 limit node1"
             exit 1
         fi
-        echo "🎯 Chạy lệnh chỉ trên $2..."
+        echo "🎯 Running command only on $2..."
         ansible all -m ping --limit $2
         ;;
     "list-tags")
-        echo "🏷️  Liệt kê tags trong site.yml..."
+        echo "🏷️  Listing tags in site.yml..."
         ansible-playbook site.yml --list-tags
         ;;
     "list-hosts")
-        echo "🖥️  Liệt kê hosts..."
+        echo "🖥️  Listing hosts..."
         ansible all --list-hosts
         ;;
     "groups")
-        echo "👥 Liệt kê groups..."
+        echo "👥 Listing groups..."
         ansible-inventory --list
         ;;
     *)
-        echo "Sử dụng: $0 {command} [args...]"
+        echo "Usage: $0 {command} [args...]"
         echo ""
-        echo "📋 Lệnh cơ bản:"
-        echo "  ping              - Test kết nối"
-        echo "  facts             - Thu thập system facts"
-        echo "  uptime            - Kiểm tra uptime"
-        echo "  disk              - Kiểm tra disk space"
-        echo "  memory            - Kiểm tra memory"
+        echo "📋 Basic commands:"
+        echo "  ping              - Test connection"
+        echo "  facts             - Gather system facts"
+        echo "  uptime            - Check uptime"
+        echo "  disk              - Check disk space"
+        echo "  memory            - Check memory"
         echo ""
-        echo "📦 Quản lý packages:"
+        echo "📦 Package management:"
         echo "  update            - Update package cache"
-        echo "  install <pkg>     - Cài đặt package"
+        echo "  install <pkg>     - Install package"
         echo ""
-        echo "⚙️  Quản lý services:"
-        echo "  service <name> <state> - Quản lý service"
+        echo "⚙️  Service management:"
+        echo "  service <name> <state> - Manage service"
         echo ""
-        echo "📁 Quản lý files:"
+        echo "📁 File management:"
         echo "  copy <src> <dest> - Copy file"
         echo ""
         echo "🎯 Playbooks:"
-        echo "  bootstrap         - Chạy bootstrap"
-        echo "  site              - Chạy site playbook"
-        echo "  test              - Chạy test playbook"
-        echo "  web               - Chỉ web servers"
-        echo "  db                - Chỉ database servers"
+        echo "  bootstrap         - Run bootstrap"
+        echo "  site              - Run site playbook"
+        echo "  test              - Run test playbook"
+        echo "  web               - Web servers only"
+        echo "  db                - Database servers only"
         echo ""
-        echo "🔍 Thông tin:"
-        echo "  limit <host>      - Giới hạn host cụ thể"
-        echo "  list-tags         - Liệt kê tags"
-        echo "  list-hosts        - Liệt kê hosts"
-        echo "  groups            - Liệt kê groups"
+        echo "🔍 Information:"
+        echo "  limit <host>      - Limit to specific host"
+        echo "  list-tags         - List tags"
+        echo "  list-hosts        - List hosts"
+        echo "  groups            - List groups"
         ;;
 esac 

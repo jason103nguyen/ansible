@@ -29,11 +29,11 @@
         <h1>🚀 Ansible Web Server</h1>
         
         <div class="info">
-            <h2>{{ custom_message | default('Chào mừng đến với Web Server') }}</h2>
+            <h2>{{ custom_message | default('Welcome to Web Server') }}</h2>
         </div>
         
         <div class="info">
-            <h3>📊 Thông tin Server:</h3>
+            <h3>📊 Server Information:</h3>
             <p><span class="highlight">Hostname:</span> {{ ansible_hostname }}</p>
             <p><span class="highlight">IP Address:</span> {{ ansible_default_ipv4.address }}</p>
             <p><span class="highlight">OS:</span> {{ ansible_distribution }} {{ ansible_distribution_version }}</p>
@@ -57,7 +57,7 @@
         
         <div class="info">
             <p style="text-align: center; margin-top: 30px;">
-                <em>🔧 Được triển khai tự động bằng Ansible</em>
+                <em>🔧 Automatically deployed with Ansible</em>
             </p>
         </div>
     </div>

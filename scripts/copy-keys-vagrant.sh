@@ -1,40 +1,40 @@
 #!/bin/bash
 
-# Script để copy SSH keys qua Vagrant SSH
-echo "🔑 Copy SSH keys qua Vagrant SSH..."
+# Script to copy SSH keys via Vagrant SSH
+echo "🔑 Copying SSH keys via Vagrant SSH..."
 
-# Kiểm tra SSH key có tồn tại không
+# Check if SSH key exists
 if [ ! -f ~/.ssh/ansible_key.pub ]; then
-    echo "❌ SSH key không tồn tại. Chạy scripts/setup-ssh-keys.sh trước"
+    echo "❌ SSH key does not exist. Run scripts/setup-ssh-keys.sh first"
     exit 1
 fi
 
-# Copy key lên từng VM
+# Copy key to each VM
 for i in {1..3}; do
-    echo "📤 Copy key lên node$i..."
+    echo "📤 Copying key to node$i..."
     
-    # Tạo thư mục .ssh trong VM
+    # Create .ssh directory in VM
     vagrant ssh node$i -c "mkdir -p ~/.ssh && chmod 700 ~/.ssh"
     
-    # Copy public key vào authorized_keys
+    # Copy public key to authorized_keys
     vagrant ssh node$i -c "echo '$(cat ~/.ssh/ansible_key.pub)' >> ~/.ssh/authorized_keys"
     
-    # Set đúng permissions
+    # Set correct permissions
     vagrant ssh node$i -c "chmod 600 ~/.ssh/authorized_keys"
     
     # Remove duplicate keys
     vagrant ssh node$i -c "sort ~/.ssh/authorized_keys | uniq > ~/.ssh/authorized_keys.tmp && mv ~/.ssh/authorized_keys.tmp ~/.ssh/authorized_keys"
     
-    echo "✅ Hoàn thành node$i"
+    echo "✅ Completed node$i"
 done
 
 echo ""
-echo "🧪 Test kết nối SSH..."
+echo "🧪 Testing SSH connections..."
 for i in {1..3}; do
-    echo "Test node$i (192.168.56.10$i)..."
+    echo "Testing node$i (192.168.56.10$i)..."
     ssh -i ~/.ssh/ansible_key -o ConnectTimeout=5 -o StrictHostKeyChecking=no vagrant@192.168.56.10$i "echo 'SSH connection successful to node$i'"
 done
 
 echo ""
-echo "✅ Hoàn thành! Bây giờ bạn có thể chạy:"
+echo "✅ Complete! Now you can run:"
 echo "ansible all -m ping" 

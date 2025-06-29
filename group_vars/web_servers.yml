@@ -1,11 +1,11 @@
 ---
-# Cấu hình cho Web Servers
+# Configuration for Web Servers
 apache_package: apache2
 apache_service: apache2
 apache_config_file: /etc/apache2/apache2.conf
 document_root: /var/www/html
 
-# Modules Apache cần enable
+# Apache modules to enable
 apache_modules:
   - rewrite
   - ssl
@@ -16,6 +16,6 @@ apache_vhosts:
     port: 80
     document_root: "{{ document_root }}"
 
-# Cổng web server
+# Web server ports
 web_server_port: 80
 ssl_port: 443 

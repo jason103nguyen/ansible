@@ -14,7 +14,7 @@ Role: {{ server_role | default('general') }}
 Generated: {{ ansible_date_time.iso8601 }}
 Timezone: {{ timezone }}
 
-{{ custom_message | default('Đây là file test được tạo bởi Ansible!') }}
+{{ custom_message | default('This is a test file created by Ansible!') }}
 
 SSH Users: {{ ssh_users | join(', ') }}
 Base Packages: {{ base_packages | join(', ') }}

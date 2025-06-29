@@ -1,46 +1,46 @@
-# ⚡ Quick Start - Bắt Đầu Nhanh
+# ⚡ Quick Start - Getting Started Fast
 
-## 🚀 5 Phút Đầu Tiên
+## 🚀 First 5 Minutes
 
-### 1. Khởi động VM
+### 1. Start VMs
 ```bash
 vagrant up
 ```
 
-### 2. Setup SSH (Git Bash/WSL)
+### 2. Setup SSH Keys
 ```bash
 bash scripts/setup-ssh-keys.sh
-bash scripts/copy-keys.sh
+bash scripts/copy-keys-vagrant.sh
 ```
 
-### 3. Test Ansible
+### 3. Test Connection
 ```bash
 ansible all -m ping
 ```
 
-### 4. Chạy Playbook Đầu Tiên
+### 4. Run First Playbook
 ```bash
 ansible-playbook test-playbook.yml
 ```
 
-### 5. Deploy Full Stack
+### 5. Deploy Full Environment
 ```bash
 ansible-playbook site.yml
 ```
 
-## 🌐 Kiểm Tra Kết Quả
+## 🌐 Check Results
 
-- Web Server: http://192.168.56.101 và http://192.168.56.102
-- SSH vào VM: `vagrant ssh node1`
+- Web Server: http://192.168.56.101 and http://192.168.56.102
+- SSH to VM: `vagrant ssh node1`
 
-## 📚 Tiếp Theo
+## 📚 Next Steps
 
-Đọc [README.md](README.md) để hiểu chi tiết về từng component.
+Read [README.md](README.md) to understand each component in detail.
 
-## ❗ Nếu Gặp Lỗi
+## ❗ If You Encounter Errors
 
-1. **SSH lỗi**: Chạy lại `bash scripts/copy-keys.sh`
-2. **VM lỗi**: `vagrant reload`
-3. **Ansible lỗi**: Kiểm tra file `inventory` và `ansible.cfg`
+1. **SSH errors**: Re-run `bash scripts/copy-keys.sh`
+2. **VM errors**: `vagrant reload`
+3. **Ansible errors**: Check `inventory` and `ansible.cfg` files
 
-Chúc thực hành vui vẻ! 🎉 
+Happy practicing! 🎉 

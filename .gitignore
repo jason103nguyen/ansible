@@ -2,7 +2,7 @@
 .vagrant/
 *.log
 
-# SSH Keys (bảo mật)
+# SSH Keys (security)
 *.pem
 *.key
 *_rsa
@@ -35,6 +35,6 @@ Thumbs.db
 *.temp
 *~
 
-# Ansible Vault files (nếu có passwords thật)
+# Ansible Vault files (if containing real passwords)
 vault.yml
 secrets.yml 

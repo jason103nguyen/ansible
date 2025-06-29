@@ -1,5 +1,5 @@
 ---
-# Cấu hình cho Database Servers
+# Configuration for Database Servers
 mysql_package: mysql-server
 mysql_service: mysql
 mysql_config_file: /etc/mysql/mysql.conf.d/mysqld.cnf
